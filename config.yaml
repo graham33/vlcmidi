@@ -1,0 +1,53 @@
+midi:
+  channel: 1
+  controller_number: 16
+  port: Morningstar
+commands:
+  0:
+    command: pl_play
+  1:
+    command: pl_stop
+  2:
+    command: pl_pause
+  3:
+    command: rate
+    val: 1.0
+  4:
+    command: rate
+    val: 0.75
+  5:
+    command: rate
+    val: 0.5
+  6:
+    command: pl_loop
+  7:
+    command: volume
+    val: "+5"
+  8:
+    command: volume
+    val: "+20"
+  9:
+    command: volume
+    val: -5
+  10:
+    command: volume
+    val: -20
+  11:
+    command: seek
+    val: +30s
+  12:
+    command: seek
+    val: +10s
+  13:
+    command: seek
+    val: -10s
+  14:
+    command: seek
+    val: -30s
+  15:
+    command: seek
+    val: 0
+vlc:
+  host: localhost
+  port: 8080
+  password: test123

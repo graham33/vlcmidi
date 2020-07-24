@@ -1,0 +1,17 @@
+name: vlcmidi
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - click
+  - flake8
+  - pip
+  - pytest
+  - pytest-timeout
+  - pyyaml
+  - requests
+  - requests-mock
+  - yapf
+  - pip:
+    - python-rtmidi >= 1.4.1
+
