@@ -1,0 +1,6 @@
+pytest
+pyyaml
+requests
+requests_mock
+rtmidi
+yapf
