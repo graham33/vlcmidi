@@ -1,6 +1,8 @@
+click
 pytest
+pytest-timeout
 pyyaml
 requests
 requests_mock
-rtmidi
+python-rtmidi
 yapf

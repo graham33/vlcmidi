@@ -2,6 +2,7 @@
 
 """Send VLC commands based on MIDI input messages."""
 
+import click
 import collections
 import logging
 import requests
@@ -119,19 +120,15 @@ def _process_message(message, session):
             _funcs[controller_value](controller_value)
 
 
-def main():
-    log = logging.getLogger('midiin_poll')
-    logging.basicConfig(level=logging.DEBUG)
+@click.command()
+@click.argument('cfg')
+@click.option('--port', help='A MIDI port number or name. The user will be prompted if not given.')
+@click.option('--verbose', help='Enable verbose logging')
+def vlcmidi(cfg, port, verbose):
+    logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
 
-    # Prompts user for MIDI input port, unless a valid port number or name
-    # is given as the first argument on the command line.
-    # API backend defaults to ALSA on Linux.
-    # TODO: cfg
-    port = sys.argv[1] if len(sys.argv) > 1 else None
-
-    # TODO: arg
-    with open('config.yaml', 'r') as f:
-        cfg = yaml.load(f)
+    with open(cfg, 'r') as f:
+        cfg = yaml.load(f, Loader=yaml.FullLoader)
 
     vlc = VLC(cfg['vlc']['password'])
 
@@ -142,15 +139,15 @@ def main():
         dispatch.register_command(controller_value, lambda x: vlc.status_cmd(command, **command_info))
 
     with MIDI(port) as midi:
-        print("Entering main loop. Press Control-C to exit.")
+        logging.info("Entering main loop. Press ctrl-c to exit.")
 
         while True:
             msg = midi.poll_message()
 
             if msg:
-                _process_message(message, vlc)
+                dispatch.process_message(msg)
 
             time.sleep(0.01)
 
 if __name__ == "__main__":
-    main()
+    vlcmidi()
