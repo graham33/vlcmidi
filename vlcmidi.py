@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """Send VLC commands based on MIDI input messages."""
 
 import click
@@ -14,8 +13,8 @@ from rtmidi.midiutil import open_midiinput
 
 # Docs for messages: https://github.com/videolan/vlc/blob/master/share/lua/http/requests/README.txt
 
-class VLC(object):
 
+class VLC(object):
     def __init__(self, password, host='localhost', port=8080):
         self._session = requests.Session()
         self._session.auth = ('', password)
@@ -34,14 +33,11 @@ class VLC(object):
         return r.json()
 
 
-
-
 class MIDI(object):
 
     Message = collections.namedtuple('Message', 'message_type channel data')
 
     _STATUS_MASK = 240
-
     '''
     @param port Default None - will prompt
     '''
@@ -61,11 +57,11 @@ class MIDI(object):
             return None
 
         rtmidi_msg, deltatime = ret
-        logging.debug("Received message %s from %s", rtmidi_msg, self._port_name)
+        logging.debug("Received message %s from %s", rtmidi_msg,
+                      self._port_name)
 
         return MIDI.Message(self._get_message_type(rtmidi_msg[0]),
-                            self._get_channel(rtmidi_msg[0]),
-                            rtmidi_msg[1:])
+                            self._get_channel(rtmidi_msg[0]), rtmidi_msg[1:])
 
     @staticmethod
     def _get_message_type(status_byte):
@@ -91,7 +87,8 @@ class MIDICommandDispatcher(object):
         self._commands[controller_value] = func
 
     def process_message(self, message):
-        logging.debug("Message type %s, channel %s", message.message_type, message.channel)
+        logging.debug("Message type %s, channel %s", message.message_type,
+                      message.channel)
 
         if message.message_type == MIDICommandDispatcher._CC_MESSAGE and message.channel == self._channel:
             controller_number = message.data[0]
@@ -103,11 +100,14 @@ class MIDICommandDispatcher(object):
                 if controller_value in self._commands:
                     self._commands[controller_value](controller_value)
                 else:
-                    logging.error(f"No command registered for controller value {controller_value}")
+                    logging.error(
+                        f"No command registered for controller value {controller_value}"
+                    )
 
 
 def _process_message(message, session):
-    logging.debug("Message type %s, channel %s", message.message_type, message.channel)
+    logging.debug("Message type %s, channel %s", message.message_type,
+                  message.channel)
 
     if message.message_type == _CC_MESSAGE and message.channel == _CHANNEL:
         controller_number = message.data[0]
@@ -116,13 +116,14 @@ def _process_message(message, session):
         if controller_number == _CONTROLLER_NUMBER:
             logging.debug("Processing %s", controller_value)
 
-
             _funcs[controller_value](controller_value)
 
 
 @click.command()
 @click.argument('cfg')
-@click.option('--port', help='A MIDI port number or name. The user will be prompted if not given.')
+@click.option(
+    '--port',
+    help='A MIDI port number or name. The user will be prompted if not given.')
 @click.option('--verbose', help='Enable verbose logging')
 def vlcmidi(cfg, port, verbose):
     logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
@@ -136,7 +137,9 @@ def vlcmidi(cfg, port, verbose):
 
     for controller_value, command_info in cfg['commands'].items():
         command = command_info.pop('command')
-        dispatch.register_command(controller_value, lambda x: vlc.status_cmd(command, **command_info))
+        dispatch.register_command(
+            controller_value,
+            lambda x: vlc.status_cmd(command, **command_info))
 
     with MIDI(port) as midi:
         logging.info("Entering main loop. Press ctrl-c to exit.")
