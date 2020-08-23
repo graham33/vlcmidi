@@ -1,4 +1,4 @@
-# vlcmidi
+# vlcmidi [![graham33](https://circleci.com/gh/graham33/vlcmidi.svg?style=svg)](https://app.circleci.com/pipelines/github/graham33/vlcmidi)
 Simple tool to run VLC commands based on MIDI input messages (e.g. from a MIDI
 footswitch).
 
