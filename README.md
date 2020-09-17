@@ -10,6 +10,12 @@ provided [environment.yml](./environment.yml)).
 The primary dependency is [python-rtmidi], which can use common MIDI APIs on
 Linux and Windows. I've tested the script on Linux (Nixos 20.03) and Windows 10.
 
+To configure VLC, go to `Tools -> Preferences`, enable All settings (not
+Simple), then go to `Interface -> Main Interfaces` and enabled `Lua interpreter`
+and `Web`. You should set a password under `Lua` -> `Lua HTTP`. The port can be
+overridden at the command line (I can't find an option for it in the UI in my
+current version of VLC).
+
 ## Configuration
 vlcmidi takes a YAML config file ([config.yaml](./config.yaml) by default, an
 example is provided), which maps MIDI Control Change messages (see the [midi.org
