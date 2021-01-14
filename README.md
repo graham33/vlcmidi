@@ -60,6 +60,26 @@ Editor]):
 As an example, 'Play' is configured to send CC 16 value 0 on channel 1 in my
 config.
 
+## Development
+
+Some notes on setting up for development:
+
+### Nix
+
+```bash
+nix-shell
+```
+
+### Anaconda
+Open an Anaconda command prompt, then create (or update) the environment, activate it and install the package in editable mode:
+
+```bash
+conda env create -f environment.yml
+conda activate vlcmidi
+pip install --editable .
+```
+
+
 [midi.org docs]: https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message
 [Morningstar Web Editor]: https://www.morningstarfx.com/editor
 [Nixpkgs]: https://github.com/NixOS/nixpkgs
