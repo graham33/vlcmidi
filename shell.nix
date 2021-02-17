@@ -4,14 +4,19 @@ with python38Packages;
 buildPythonPackage {
   name = "vlcmidi";
   src = ".";
-  propagatedBuildInputs = [ click
-                            flake8
-                            pytest
-                            pytest-timeout
-                            pyyaml
-                            requests
-                            requests-mock
-                            python-rtmidi
-                            yapf
-                          ];
+  nativeBuildInputs = [
+    flake8
+    yapf
+  ];
+  propagatedBuildInputs = [
+    click
+    pyyaml
+    requests
+    python-rtmidi
+  ];
+  checkInputs = [
+    pytest
+    pytest-timeout
+    requests-mock
+  ];
 }
